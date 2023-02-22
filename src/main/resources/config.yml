@@ -1,0 +1,71 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#     ___      ___   _______  _______  _______  _______  _______  _______  ___        #
+#    |   |    |   | |       ||       ||       ||       ||       ||   _   ||   |       #
+#    |   |    |   | |    ___||    ___||  _____||_     _||    ___||  |_|  ||   |       #
+#    |   |    |   | |   |___ |   |___ | |_____   |   |  |   |___ |       ||   |       #
+#    |   |___ |   | |    ___||    ___||_____  |  |   |  |    ___||       ||   |___    #
+#    |       ||   | |   |    |   |___  _____| |  |   |  |   |___ |   _   ||       |   #
+#    |_______||___| |___|    |_______||_______|  |___|  |_______||__| |__||_______|   #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# - - - - - - - - - - - - - - - - - -
+# This is the configuration file for
+# my plugin LifeSteal. This plugin
+# is extremely configurable and
+# this is where you can configure
+# everything.
+#
+# If you're confused, then please
+# join our discord
+# https://tomsoz.xyz/discord
+# - - - - - - - - - - - - - - - - - -
+
+# This is the permission you need to use LifeSteal, without it you won't lose or gain hearts.
+heartChangePerm: "lifesteal.use"
+
+# This is the amount of health that is removed on each death.
+# 2 health = 1 heart
+removePerDeath: 2
+
+# This is the amount of health that is added on each kill.
+# 2 health = 1 heart
+addPerKill: 2
+
+# This is the maximum amount of health that a player can have. This does not include +5 max
+# hearts.
+# If that recipe is enabled please take this into consideration.
+# 2 health = 1 heart
+maxHealth: 40
+
+# This is the minimum amount of health that a player can have. If they are at this point
+# then they won't give any health for being killed and won't lose any on death.
+# 2 health = 1 heart
+minHealth: 2
+
+# These are the only worlds that LifeSteal works in. Nothing in LifeSteal will work in worlds
+# that aren't on this list.
+onlyWorkIn: ["world", "world_nether", "world_the_end"]
+
+# These are all recipes that are in the plugin and where you can toggle them.
+# To find out the actual crafting recipes check the plugin's spigot page.
+recipes:
+  # +1 Heart
+  addHeart: true
+
+  # -1 Heart
+  removeHeart: true
+
+  # +5 Max Hearts
+  add5MaxHearts: true
+
+  # Enchanted Golden Apple
+  enchantedGoldenApple: true
+
+  # Using heart fragments
+  heartFragments: true
+
+# These are the mobs that can drop heart fragments.
+heartFragmentMobs:
+  # The 1 means it is a 1% chance to drop one.
+  villager: 1
+  zombie: 1
