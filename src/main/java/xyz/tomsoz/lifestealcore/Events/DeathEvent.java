@@ -30,17 +30,9 @@ public class DeathEvent implements Listener {
         FileConfiguration msgs = this.plugin.getConfigManager().getMessages();
         FileConfiguration data = this.plugin.getConfigManager().getData();
         Player victim = e.getEntity();
-        boolean isValid = true;
-        List<String> validWorlds = config.getStringList("onlyWorkIn");
-        for (String w : validWorlds) {
-            if (!victim.getWorld().getName().equalsIgnoreCase(w)) {
-                isValid = false;
-                continue;
-            }
-            isValid = true;
-        }
-        if (!isValid)
-            return;
+
+        if (!Utils.isValidWorld(config, victim.getWorld())) return;
+
         ItemStack heart = new ItemStack(Material.RED_DYE);
         ItemMeta meta = heart.getItemMeta();
         meta.setDisplayName(Utils.chatRaw("&c+1 Heart"));
@@ -56,41 +48,44 @@ public class DeathEvent implements Listener {
             if (current < config.getDouble("maxHealth")) {
                 double newVal = current + config.getDouble("addPerKill");
                 attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newVal);
-                attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("healthAdded").replaceAll("%stolen%", config.getDouble("addPerKill") + "").replaceAll("%victim%", victim.getDisplayName()).replaceAll("%health%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
+                attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("healthAdded").replaceAll("%stolen%", config.getDouble("addPerKill") + "").replaceAll("%victim%", victim.getDisplayName()).replaceAll("%health%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
             } else if (victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() > config.getDouble("minHealth")) {
                 e.getDrops().add(heart);
-                attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("maxHealth").replaceAll("%max%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
+                attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("maxHealth").replaceAll("%max%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
             }
         }
         if (victim.hasPermission(config.getString("heartChangePerm"))) {
             double current = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             if (current > config.getDouble("minHealth")) {
                 if (attacker == null) {
-                    victim.sendMessage(Utils.chat(this.plugin, msgs.getString("healthRemovedNoKiller").replaceAll("%lost%", config.getDouble("removePerDeath") + "").replaceAll("%health%", victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
+                    victim.sendMessage(Utils.chat(this.plugin, msgs.getString("healthRemovedNoKiller").replaceAll("%nl%", "\n" + msgs.getString("prefix")).replaceAll("%lost%", config.getDouble("removePerDeath") + "").replaceAll("%health%", victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
                     e.getDrops().add(heart);
                     double newVal = current - config.getDouble("removePerDeath");
                     victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newVal);
                 } else if (attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= config.getDouble("maxHealth")) {
-                    victim.sendMessage(Utils.chat(this.plugin, msgs.getString("noHealthRemovedKillerMax")));
+                    victim.sendMessage(Utils.chat(this.plugin, msgs.getString("noHealthRemovedKillerMax").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
                     double newVal = current - config.getDouble("removePerDeath");
                     victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newVal);
                 } else {
                     double newVal = current - config.getDouble("removePerDeath");
                     victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newVal);
-                    victim.sendMessage(Utils.chat(this.plugin, msgs.getString("healthRemoved").replaceAll("%killer%", attacker.getDisplayName()).replaceAll("%stolen%", config.getDouble("removePerDeath") + "").replaceAll("%health%", victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
+                    victim.sendMessage(Utils.chat(this.plugin, msgs.getString("healthRemoved").replaceAll("%nl%", "\n" + msgs.getString("prefix")).replaceAll("%killer%", attacker.getDisplayName()).replaceAll("%stolen%", config.getDouble("removePerDeath") + "").replaceAll("%health%", victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
                 }
             } else {
                 if (config.getBoolean("banIfOutOfHearts")) {
-                    Bukkit.broadcastMessage(Utils.chat(plugin, msgs.getString("bannedUser")));
                     if (victim.hasPermission(config.getString("banExemptPerm"))) {
                         victim.setGameMode(GameMode.SPECTATOR);
-                        victim.sendMessage(msgs.getString("userPutInSpec"));
+                        victim.sendMessage(Utils.chat(plugin, msgs.getString("userPutInSpec").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
                     } else {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString("banCommand"));
                     }
-                    Bukkit.broadcastMessage(Utils.chat(plugin, msgs.getString("bannedUser").replaceAll("%eliminated%", victim.getDisplayName())));
+                    List<String> banned = data.getStringList("bannedPlayers");
+                    banned.add(victim.getUniqueId() + " : " + victim.getName());
+                    data.set("bannedPlayers", banned);
+                    plugin.getConfigManager().saveOtherData();
+                    Bukkit.broadcastMessage(Utils.chatRaw(msgs.getString("bannedUser").replaceAll("%nl%", "\n" + msgs.getString("prefix")).replaceAll("%eliminated%", victim.getDisplayName())));
                 } else {
-                    victim.sendMessage(Utils.chat(plugin, msgs.getString("minHealth")));
+                    victim.sendMessage(Utils.chat(plugin, msgs.getString("minHealth").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
                 }
             }
         }

@@ -19,14 +19,18 @@ public final class LifeStealCore extends JavaPlugin {
 
     public void onEnable() {
         this.config.initialize();
+        Utils.sendConsole(Utils.chat(this, "&aConfiguration files have been initialised."));
         this.recepies.initialize();
+        Utils.sendConsole(Utils.chat(this, "&aCrafting recepies have been initialised."));
         registerEvents();
+        Utils.sendConsole(Utils.chat(this, "&aEvents have been initialised."));
         registerCommands();
-        Utils.sendConsole(Utils.chat(this, "&a" + getDescription().getFullName() + " v" + getDescription().getVersion() + " &7by&a " + String.join(", ", getDescription().getAuthors()) + " &7has successfully enabled."));
+        Utils.sendConsole(Utils.chat(this, "&aCommands have been initialised."));
+        Utils.sendConsole(Utils.chat(this, "&a" + getDescription().getFullName() + " &7by&a " + String.join(", ", getDescription().getAuthors()) + " &7has successfully enabled."));
     }
 
     public void onDisable() {
-        Utils.sendConsole(Utils.chat(this, "&c" + getDescription().getFullName() + " v" + getDescription().getVersion() + " &7by&c " + String.join(", ", getDescription().getAuthors()) + " &7has successfully disabled."));
+        Utils.sendConsole(Utils.chat(this, "&c" + getDescription().getFullName() + " &7by&c " + String.join(", ", getDescription().getAuthors()) + " &7has successfully disabled."));
     }
 
     public ConfigManager getConfigManager() {
@@ -46,6 +50,7 @@ public final class LifeStealCore extends JavaPlugin {
         registerEvent(new DamageEvent(this));
         registerEvent(new RespawnEvent(this));
         registerEvent(new MobDeathEvent(this));
+        registerEvent(new CommandPreprocessEvent(this));
     }
 
     public void registerCommands() {

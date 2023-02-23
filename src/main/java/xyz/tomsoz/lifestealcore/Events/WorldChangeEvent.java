@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
+import xyz.tomsoz.lifestealcore.Misc.Utils;
 
 import java.util.List;
 
@@ -22,26 +23,10 @@ public class WorldChangeEvent implements Listener {
         FileConfiguration config = this.plugin.getConfigManager().getConfig();
         FileConfiguration msgs = this.plugin.getConfigManager().getMessages();
         FileConfiguration data = this.plugin.getConfigManager().getData();
-        boolean isValid = true;
-        boolean isTransferredValid = true;
-        List<String> validWorlds = config.getStringList("onlyWorkIn");
-        for (String w : validWorlds) {
-            if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(w)) {
-                isValid = false;
-                continue;
-            }
-            isValid = true;
-        }
-        for (String w : validWorlds) {
-            if (!e.getFrom().getName().equalsIgnoreCase(w)) {
-                isTransferredValid = false;
-                continue;
-            }
-            isTransferredValid = true;
-        }
+
         Player p = e.getPlayer();
-        if (!isValid) {
-            if (isTransferredValid) {
+        if (!Utils.isValidWorld(config, e.getPlayer().getWorld())) {
+            if (Utils.isValidWorld(config, e.getFrom())) {
                 data.set("health." + p.getUniqueId(), Double.valueOf(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
                 this.plugin.getConfigManager().saveOtherData();
             }

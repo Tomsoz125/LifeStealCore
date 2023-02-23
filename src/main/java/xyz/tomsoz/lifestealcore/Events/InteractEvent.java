@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,22 +28,12 @@ public class InteractEvent implements Listener {
     public InteractEvent(LifeStealCore plugin) {
         this.plugin = plugin;
     }
-
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
+        FileConfiguration config = this.plugin.getConfigManager().getConfig();
         if (e.getHand() != null && e.getHand().equals(EquipmentSlot.OFF_HAND))
             return;
-        boolean isValid = true;
-        List<String> validWorlds = this.plugin.getConfigManager().getConfig().getStringList("onlyWorkIn");
-        for (String w : validWorlds) {
-            if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(w)) {
-                isValid = false;
-                continue;
-            }
-            isValid = true;
-        }
-        if (!isValid)
-            return;
+        if (!Utils.isValidWorld(config, e.getPlayer().getWorld())) return;
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e
                 .getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Player p = e.getPlayer();
@@ -61,21 +52,6 @@ public class InteractEvent implements Listener {
                 this.plugin.getConfigManager().getData().set("health." + p.getUniqueId(), Double.valueOf(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
                 this.plugin.getConfigManager().saveOtherData();
                 p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("healthCrafted")));
-            }
-            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getRemHeart().getResult().getItemMeta().getDisplayName())) {
-                e.setCancelled(true);
-                int minHealth = this.plugin.getConfigManager().getConfig().getInt("minHealth");
-                if (minHealth >= p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
-                    p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("minHealth")));
-                    return;
-                }
-                ItemStack hand = p.getInventory().getItemInMainHand();
-                hand.setAmount(hand.getAmount() - 1);
-                p.getInventory().setItemInMainHand(hand);
-                p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() - 2.0D);
-                this.plugin.getConfigManager().getData().set("health." + p.getUniqueId(), Double.valueOf(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
-                this.plugin.getConfigManager().saveOtherData();
-                p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("healthRemovedCraft")));
             }
             if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getMaxHeart().getResult().getItemMeta().getDisplayName())) {
                 e.setCancelled(true);
@@ -101,12 +77,9 @@ public class InteractEvent implements Listener {
                 if (plugin.getConfigManager().getData().getStringList("bannedPlayers").size() == 0) {
                     page = new ComponentBuilder("There are no eliminated players at the moment.").event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Wait for somebody to be eliminated!").create())).create();
                 } else {
-                    ComponentBuilder text = new ComponentBuilder("Please click on a player name to revive them: ");
+                    ComponentBuilder text = new ComponentBuilder("Please click on a player name to §lrevive §rthem: ");
                     for (String s : plugin.getConfigManager().getData().getStringList("bannedPlayers")) {
-                        OfflinePlayer banned = Bukkit.getOfflinePlayer(s);
-                        if (banned != null) {
-                            text.append(new ComponentBuilder("\n> " + banned.getName()).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click here to revive " + banned.getName()).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "5392749c-d659-41ac-aabc-d72299ef9a105392749c-d659-41ac-aabc-d72299ef9a10 " + banned.getUniqueId())).create());
-                        }
+                        text.append(new ComponentBuilder("\n> " + (s.split(" : ")[1] == null ? "Error" : s.split(" : ")[1])).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click here to revive " + (s.split(" : ")[1] == null ? "Error" : s.split(" : ")[1])).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/5392749c-d659-41ac-aabc-d72299ef9a105392749c-d659-41ac-aabc-d72299ef9a10 " + s)).create());
                     }
                     page = text.create();
                 }

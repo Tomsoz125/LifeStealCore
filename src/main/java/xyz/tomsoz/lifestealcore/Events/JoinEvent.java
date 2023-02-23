@@ -2,11 +2,13 @@ package xyz.tomsoz.lifestealcore.Events;
 
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
+import xyz.tomsoz.lifestealcore.Misc.Utils;
 
 import java.util.List;
 
@@ -16,20 +18,11 @@ public class JoinEvent implements Listener {
     public JoinEvent(LifeStealCore plugin) {
         this.plugin = plugin;
     }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        FileConfiguration config = this.plugin.getConfigManager().getConfig();
         Player p = e.getPlayer();
-        boolean isValid = true;
-        List<String> validWorlds = this.plugin.getConfigManager().getConfig().getStringList("onlyWorkIn");
-        for (String w : validWorlds) {
-            if (!p.getWorld().getName().equalsIgnoreCase(w)) {
-                isValid = false;
-                continue;
-            }
-            isValid = true;
-        }
-        if (isValid) {
+        if (Utils.isValidWorld(config, p.getWorld())) {
             double getMaxHealth = this.plugin.getConfigManager().getData().getDouble("health." + p.getUniqueId());
             if (getMaxHealth != 0.0D)
                 p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth);
@@ -37,6 +30,7 @@ public class JoinEvent implements Listener {
 
         if (plugin.getConfigManager().getData().getBoolean("toSurvival." + p.getUniqueId())) {
             p.setGameMode(GameMode.SURVIVAL);
+            p.sendMessage(Utils.chat(plugin, "&aYou have been revived!"));
             plugin.getConfigManager().getData().set("toSurvival." + p.getUniqueId(), null);
             plugin.getConfigManager().saveOtherData();
         }

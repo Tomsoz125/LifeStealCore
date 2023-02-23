@@ -1,6 +1,7 @@
 package xyz.tomsoz.lifestealcore.Events;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -19,20 +20,10 @@ public class MobDeathEvent implements Listener {
     public MobDeathEvent(LifeStealCore plugin) {
         this.plugin = plugin;
     }
-
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
-        boolean isValid = true;
-        List<String> validWorlds = this.plugin.getConfigManager().getConfig().getStringList("onlyWorkIn");
-        for (String w : validWorlds) {
-            if (!e.getEntity().getWorld().getName().equalsIgnoreCase(w)) {
-                isValid = false;
-                continue;
-            }
-            isValid = true;
-        }
-        if (!isValid)
-            return;
+        FileConfiguration config = this.plugin.getConfigManager().getConfig();
+        if (!Utils.isValidWorld(config, e.getEntity().getWorld())) return;
         int percentage = this.plugin.getConfigManager().getConfig().getInt("heartFragmentMobs." + e.getEntity().getType().getName().toLowerCase());
         if (percentage > 0) {
             int big = 100 / percentage;

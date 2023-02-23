@@ -44,6 +44,7 @@ minHealth: 2
 
 # These are the only worlds that LifeSteal works in. Nothing in LifeSteal will work in worlds
 # that aren't on this list.
+# (Case Sensitive)
 onlyWorkIn: ["world", "world_nether", "world_the_end"]
 
 # If this is true then if a user reaches below the minHealth as defined above they will be banned from the server.
@@ -60,6 +61,10 @@ unbanCommand: "unban %eliminated% -s Revived!"
 
 # This allows players to craft the revive book and use it to bring back a player that has been eliminated.
 useReviveBook: true
+
+# How much health a person who has just been revived has. Beware this could lead to duping hearts.
+# 2 health = 1 heart
+revivedHealth: 10.0
 
 # These are all recipes that are in the plugin and where you can toggle them.
 # To find out the actual crafting recipes check the plugin's spigot page.

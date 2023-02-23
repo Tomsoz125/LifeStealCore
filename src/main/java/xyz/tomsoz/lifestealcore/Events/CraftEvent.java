@@ -22,17 +22,7 @@ public class CraftEvent implements Listener {
 
     @EventHandler
     public void onCraft(CraftItemEvent e) {
-        boolean isValid = true;
-        List<String> validWorlds = this.plugin.getConfigManager().getConfig().getStringList("onlyWorkIn");
-        for (String w : validWorlds) {
-            if (!e.getWhoClicked().getWorld().getName().equalsIgnoreCase(w)) {
-                isValid = false;
-                continue;
-            }
-            isValid = true;
-        }
-        if (!isValid)
-            return;
+        if (!Utils.isValidWorld(plugin.getConfigManager().getConfig(), e.getWhoClicked().getWorld())) return;
         ShapedRecipe add5 = this.plugin.getRecepies().getMaxHeart();
         if ((((add5 != null) ? 1 : 0) & ((e.getInventory().getSize() == 10) ? 1 : 0)) != 0 && e.getInventory().getResult().equals(add5.getResult()) &&
                 e.getRawSlot() == 0) {

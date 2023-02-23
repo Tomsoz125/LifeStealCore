@@ -75,16 +75,8 @@ public class LSAdmin implements CommandExecutor {
                     if (target.isOnline()) {
                         Player online = (Player)target;
                         display = online.getDisplayName();
-                        boolean isValid = false;
-                        List<String> validWorlds = this.plugin.getConfigManager().getConfig().getStringList("onlyWorkIn");
-                        for (String w : validWorlds) {
-                            if (!online.getWorld().getName().equalsIgnoreCase(w)) {
-                                isValid = false;
-                                continue;
-                            }
-                            isValid = true;
-                        }
-                        if (isValid) {
+
+                        if (Utils.isValidWorld(plugin.getConfigManager().getConfig(), online.getWorld())) {
                             online.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(amount);
                             online.sendMessage(Utils.chat(this.plugin, "&a" + name + " &ahas set your health to " + amount + "."));
                         }
@@ -110,16 +102,8 @@ public class LSAdmin implements CommandExecutor {
                     if (target.isOnline()) {
                         Player online = (Player)target;
                         display = online.getDisplayName();
-                        boolean isValid = false;
-                        List<String> validWorlds = this.plugin.getConfigManager().getConfig().getStringList("onlyWorkIn");
-                        for (String w : validWorlds) {
-                            if (!online.getWorld().getName().equalsIgnoreCase(w)) {
-                                isValid = false;
-                                continue;
-                            }
-                            isValid = true;
-                        }
-                        if (isValid)
+
+                        if (Utils.isValidWorld(plugin.getConfigManager().getConfig(), online.getWorld()))
                             online.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(amount);
                         online.sendMessage(Utils.chat(this.plugin, "&a" + name + " &ahas set your health to " + amount + "."));
                     }
