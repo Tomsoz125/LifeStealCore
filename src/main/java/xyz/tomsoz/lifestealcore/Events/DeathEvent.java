@@ -1,5 +1,7 @@
 package xyz.tomsoz.lifestealcore.Events;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -52,13 +54,9 @@ public class DeathEvent implements Listener {
         if (attacker != null && attacker.hasPermission(config.getString("heartChangePerm"))) {
             double current = attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             if (current < config.getDouble("maxHealth")) {
-                if (victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() <= config.getDouble("minHealth")) {
-                    attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("noHealthAddedVictimMin")));
-                } else {
-                    double newVal = current + config.getDouble("addPerKill");
-                    attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newVal);
-                    attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("healthAdded").replaceAll("%stolen%", config.getDouble("addPerKill") + "").replaceAll("%victim%", victim.getDisplayName()).replaceAll("%health%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
-                }
+                double newVal = current + config.getDouble("addPerKill");
+                attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(newVal);
+                attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("healthAdded").replaceAll("%stolen%", config.getDouble("addPerKill") + "").replaceAll("%victim%", victim.getDisplayName()).replaceAll("%health%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
             } else if (victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() > config.getDouble("minHealth")) {
                 e.getDrops().add(heart);
                 attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("maxHealth").replaceAll("%max%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
@@ -82,7 +80,18 @@ public class DeathEvent implements Listener {
                     victim.sendMessage(Utils.chat(this.plugin, msgs.getString("healthRemoved").replaceAll("%killer%", attacker.getDisplayName()).replaceAll("%stolen%", config.getDouble("removePerDeath") + "").replaceAll("%health%", victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "")));
                 }
             } else {
-                victim.sendMessage(Utils.chat(this.plugin, msgs.getString("minHealth")));
+                if (config.getBoolean("banIfOutOfHearts")) {
+                    Bukkit.broadcastMessage(Utils.chat(plugin, msgs.getString("bannedUser")));
+                    if (victim.hasPermission(config.getString("banExemptPerm"))) {
+                        victim.setGameMode(GameMode.SPECTATOR);
+                        victim.sendMessage(msgs.getString("userPutInSpec"));
+                    } else {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString("banCommand"));
+                    }
+                    Bukkit.broadcastMessage(Utils.chat(plugin, msgs.getString("bannedUser").replaceAll("%eliminated%", victim.getDisplayName())));
+                } else {
+                    victim.sendMessage(Utils.chat(plugin, msgs.getString("minHealth")));
+                }
             }
         }
         data.set("health." + victim.getUniqueId(), Double.valueOf(victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));

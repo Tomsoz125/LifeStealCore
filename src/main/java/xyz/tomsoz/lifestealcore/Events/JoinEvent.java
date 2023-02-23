@@ -1,5 +1,6 @@
 package xyz.tomsoz.lifestealcore.Events;
 
+import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +33,12 @@ public class JoinEvent implements Listener {
             double getMaxHealth = this.plugin.getConfigManager().getData().getDouble("health." + p.getUniqueId());
             if (getMaxHealth != 0.0D)
                 p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth);
-            return;
+        }
+
+        if (plugin.getConfigManager().getData().getBoolean("toSurvival." + p.getUniqueId())) {
+            p.setGameMode(GameMode.SURVIVAL);
+            plugin.getConfigManager().getData().set("toSurvival." + p.getUniqueId(), null);
+            plugin.getConfigManager().saveOtherData();
         }
     }
 }

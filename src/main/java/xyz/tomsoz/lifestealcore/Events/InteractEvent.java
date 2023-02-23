@@ -1,5 +1,12 @@
 package xyz.tomsoz.lifestealcore.Events;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
 
@@ -83,6 +91,32 @@ public class InteractEvent implements Listener {
                 this.plugin.getConfigManager().getData().set("maxHealth." + p.getUniqueId(), Double.valueOf(extraHealth + 10.0D));
                 this.plugin.getConfigManager().saveOtherData();
                 p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("addedMaxHealth")));
+            }
+            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getReviveBook().getResult().getItemMeta().getDisplayName())) {
+                e.setCancelled(true);
+                ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+                BookMeta meta = (BookMeta) book.getItemMeta();
+
+                BaseComponent[] page;
+                if (plugin.getConfigManager().getData().getStringList("bannedPlayers").size() == 0) {
+                    page = new ComponentBuilder("There are no eliminated players at the moment.").event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Wait for somebody to be eliminated!").create())).create();
+                } else {
+                    ComponentBuilder text = new ComponentBuilder("Please click on a player name to revive them: ");
+                    for (String s : plugin.getConfigManager().getData().getStringList("bannedPlayers")) {
+                        OfflinePlayer banned = Bukkit.getOfflinePlayer(s);
+                        if (banned != null) {
+                            text.append(new ComponentBuilder("\n> " + banned.getName()).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click here to revive " + banned.getName()).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "5392749c-d659-41ac-aabc-d72299ef9a105392749c-d659-41ac-aabc-d72299ef9a10 " + banned.getUniqueId())).create());
+                        }
+                    }
+                    page = text.create();
+                }
+
+                meta.spigot().addPage(page);
+                meta.setTitle("Revive Book");
+                meta.setAuthor("Tomsoz");
+                book.setItemMeta(meta);
+
+                p.openBook(book);
             }
         }
     }

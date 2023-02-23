@@ -26,9 +26,11 @@ public class CustomRecepies {
 
     ShapedRecipe heartFragments;
 
+    ShapedRecipe reviveBook;
+
     NamespacedKey addHeartKey;
 
-    NamespacedKey remHeartKey;
+    NamespacedKey reviveBookKey;
 
     NamespacedKey enchantedGappKey;
 
@@ -42,29 +44,25 @@ public class CustomRecepies {
         this.enchantedGapp = null;
         this.maxHeart = null;
         this.heartFragments = null;
+        this.reviveBook = null;
         this.addHeartKey = null;
-        this.remHeartKey = null;
         this.enchantedGappKey = null;
         this.maxHeartKey = null;
         this.heartFragmentsKey = null;
+        this.reviveBookKey = null;
         this.plugin = plugin;
     }
 
     public void initialize() {
         this.addHeart = createHeartRecepie();
-        this.remHeart = remHeartRecepie();
         this.enchantedGapp = enchantedGappRecepie();
         this.maxHeart = maxHeartRecepie();
         this.heartFragments = heartFragmentsRecepie();
+        this.reviveBook = reviveBookRecepie();
         if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.addHeart")) {
             if (Bukkit.getServer().getRecipe(this.addHeartKey) != null)
                 Bukkit.getServer().removeRecipe(this.addHeartKey);
             Bukkit.getServer().addRecipe((Recipe)getCreateHeart());
-        }
-        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.removeHeart")) {
-            if (Bukkit.getServer().getRecipe(this.remHeartKey) != null)
-                Bukkit.getServer().removeRecipe(this.remHeartKey);
-            Bukkit.getServer().addRecipe((Recipe)getRemHeart());
         }
         if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.add5MaxHearts")) {
             if (Bukkit.getServer().getRecipe(this.maxHeartKey) != null)
@@ -80,6 +78,11 @@ public class CustomRecepies {
             if (Bukkit.getServer().getRecipe(this.heartFragmentsKey) != null)
                 Bukkit.getServer().removeRecipe(this.heartFragmentsKey);
             Bukkit.getServer().addRecipe((Recipe)getHeartFragments());
+        }
+        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.reviveBook")) {
+            if (Bukkit.getServer().getRecipe(this.reviveBookKey) != null)
+                Bukkit.getServer().removeRecipe(this.reviveBookKey);
+            Bukkit.getServer().addRecipe((Recipe)getReviveBook());
         }
     }
 
@@ -101,6 +104,10 @@ public class CustomRecepies {
 
     public ShapedRecipe getHeartFragments() {
         return this.heartFragments;
+    }
+
+    public ShapedRecipe getReviveBook() {
+        return this.reviveBook;
     }
 
     private ShapedRecipe heartFragmentsRecepie() {
@@ -133,28 +140,9 @@ public class CustomRecepies {
         this.addHeartKey = new NamespacedKey((Plugin)this.plugin, "extra_heart");
         ShapedRecipe recepie = new ShapedRecipe(this.addHeartKey, heart);
         recepie.shape(new String[] { "*%*", "%#%", "*%*" });
-        recepie.setIngredient('*', Material.DIAMOND);
+        recepie.setIngredient('*', Material.DIAMOND_BLOCK);
         recepie.setIngredient('%', Material.EMERALD_BLOCK);
         recepie.setIngredient('#', Material.TOTEM_OF_UNDYING);
-        return recepie;
-    }
-
-    private ShapedRecipe remHeartRecepie() {
-        ItemStack heart = new ItemStack(Material.BLACK_DYE);
-        ItemMeta meta = heart.getItemMeta();
-        meta.setDisplayName(Utils.chatRaw("&0-1 Heart"));
-        List<String> lore = new ArrayList<>();
-        lore.add(Utils.chatRaw("&7Takes one of your hearts,"));
-        lore.add(Utils.chatRaw("&7provided you aren't at"));
-        lore.add(Utils.chatRaw("&7your minimum."));
-        meta.setLore(lore);
-        heart.setItemMeta(meta);
-        this.remHeartKey = new NamespacedKey((Plugin)this.plugin, "remove_heart");
-        ShapedRecipe recepie = new ShapedRecipe(this.remHeartKey, heart);
-        recepie.shape(new String[] { "*%*", "%#%", "*%*" });
-        recepie.setIngredient('*', Material.QUARTZ);
-        recepie.setIngredient('%', Material.ANCIENT_DEBRIS);
-        recepie.setIngredient('#', Material.WITHER_SKELETON_SKULL);
         return recepie;
     }
 
@@ -185,6 +173,25 @@ public class CustomRecepies {
         recepie.setIngredient('<', Material.RED_DYE);
         recepie.setIngredient('%', Material.NETHERITE_BLOCK);
         recepie.setIngredient('#', Material.NETHER_STAR);
+        return recepie;
+    }
+
+    private ShapedRecipe reviveBookRecepie() {
+        ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemMeta meta = book.getItemMeta();
+        meta.setDisplayName(Utils.chatRaw("&6Revive Book"));
+        List<String> lore = new ArrayList<>();
+        lore.add(Utils.chatRaw("&7This item can bring"));
+        lore.add(Utils.chatRaw("&7a player back from the"));
+        lore.add(Utils.chatRaw("&7dead."));
+        meta.setLore(lore);
+        book.setItemMeta(meta);
+        this.reviveBookKey = new NamespacedKey((Plugin)this.plugin, "revive_book");
+        ShapedRecipe recepie = new ShapedRecipe(this.reviveBookKey, book);
+        recepie.shape(new String[] { "<<<", "%#%", "<<<" });
+        recepie.setIngredient('<', Material.TOTEM_OF_UNDYING);
+        recepie.setIngredient('%', Material.DIAMOND_BLOCK);
+        recepie.setIngredient('#', Material.BOOK);
         return recepie;
     }
 }
