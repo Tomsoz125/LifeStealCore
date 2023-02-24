@@ -70,6 +70,8 @@ public class CommandPreprocessEvent implements Listener {
                     ((Player) banned).setGameMode(GameMode.SURVIVAL);
                     ((Player) banned).teleport(((Player) banned).getBedSpawnLocation() == null ?  e.getPlayer().getWorld().getSpawnLocation() : ((Player) banned).getBedSpawnLocation());
                     ((Player) banned).getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(plugin.getConfigManager().getConfig().getDouble("revivedHealth"));
+                    plugin.getConfigManager().getData().set("health." + ((Player) banned).getUniqueId(), Double.valueOf(plugin.getConfigManager().getConfig().getDouble("revivedHealth")));
+                    this.plugin.getConfigManager().saveOtherData();
                 } else {
                     plugin.getConfigManager().getData().set("toSurvival." + banned.getUniqueId(), true);
                     plugin.getConfigManager().saveOtherData();
@@ -78,6 +80,7 @@ public class CommandPreprocessEvent implements Listener {
         }
 
         if (e.getMessage().equals("/45392749c-d659-41ac-aabc-d72299ef9a105392749c-d659-41ac-aabc-d72299ef9a10")) {
+            e.setCancelled(true);
             e.getPlayer().sendMessage(Utils.chat(plugin, "&7Revive has been cancelled."));
         }
     }

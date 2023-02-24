@@ -1,5 +1,7 @@
 package xyz.tomsoz.lifestealcore;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -10,6 +12,7 @@ import xyz.tomsoz.lifestealcore.Commands.TransferHeart;
 import xyz.tomsoz.lifestealcore.Events.*;
 import xyz.tomsoz.lifestealcore.Misc.ConfigManager;
 import xyz.tomsoz.lifestealcore.Misc.CustomRecepies;
+import xyz.tomsoz.lifestealcore.Misc.LogFilter;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
 
 public final class LifeStealCore extends JavaPlugin {
@@ -26,6 +29,7 @@ public final class LifeStealCore extends JavaPlugin {
         Utils.sendConsole(Utils.chat(this, "&aEvents have been initialised."));
         registerCommands();
         Utils.sendConsole(Utils.chat(this, "&aCommands have been initialised."));
+        ((Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
         Utils.sendConsole(Utils.chat(this, "&a" + getDescription().getFullName() + " &7by&a " + String.join(", ", getDescription().getAuthors()) + " &7has successfully enabled."));
     }
 

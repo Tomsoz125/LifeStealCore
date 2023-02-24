@@ -9,7 +9,7 @@ noHealthAddedVictimMin: "&7You haven't gained any health because your victim has
 healthCrafted: "&7You've gained an extra heart."
 healthRemovedCraft: "&7You've lost a heart."
 maxExtraHealth: "&7You've already got your maximum amount of extra health."
-addedMaxHealth: "&7Added 5 hearts to your max health."
+addedMaxHealth: "&7Added &c5 hearts &7to your max health. It is now &c%max%&7!"
 bannedUser: "\n&c%eliminated% &7has ran out of hearts!\n"
 unbannedUser: "\n&c%eliminated% &7has been revived!\n"
 userPutInSpec: "&7You've been put into spectator mode as you have ran out of hearts."

@@ -4,9 +4,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -19,8 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
-
-import java.util.List;
 
 public class InteractEvent implements Listener {
     LifeStealCore plugin;
@@ -56,17 +52,16 @@ public class InteractEvent implements Listener {
             if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getMaxHeart().getResult().getItemMeta().getDisplayName())) {
                 e.setCancelled(true);
                 int extraHealth = this.plugin.getConfigManager().getData().getInt("maxHealth." + p.getUniqueId());
-                if (extraHealth >= 40) {
+                if (extraHealth >= (5 * plugin.getConfigManager().getConfig().getInt("plusMaxHeartLimit"))) {
                     p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("maxExtraHealth")));
                     return;
                 }
                 ItemStack hand = p.getInventory().getItemInMainHand();
                 hand.setAmount(hand.getAmount() - 1);
                 p.getInventory().setItemInMainHand(hand);
-                p.sendMessage(Utils.chat(this.plugin, (extraHealth + 10.0D) + ""));
                 this.plugin.getConfigManager().getData().set("maxHealth." + p.getUniqueId(), Double.valueOf(extraHealth + 10.0D));
                 this.plugin.getConfigManager().saveOtherData();
-                p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("addedMaxHealth")));
+                p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("addedMaxHealth").replaceAll("%max%", extraHealth + 10.0D + "")));
             }
             if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getReviveBook().getResult().getItemMeta().getDisplayName())) {
                 e.setCancelled(true);

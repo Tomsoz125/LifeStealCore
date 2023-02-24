@@ -163,7 +163,7 @@ public class CustomRecepies {
         List<String> lore = new ArrayList<>();
         lore.add(Utils.chatRaw("&7Increases the total amount"));
         lore.add(Utils.chatRaw("&7of hearts you can have."));
-        lore.add(Utils.chatRaw("&7Only four can be used"));
+        lore.add(Utils.chatRaw("&7Only " + plugin.getConfigManager().getConfig().getInt("plusMaxHeartLimit") + " can be used"));
         lore.add(Utils.chatRaw("&7per player."));
         meta.setLore(lore);
         heart.setItemMeta(meta);

@@ -27,8 +27,8 @@ public class MobDeathEvent implements Listener {
         int percentage = this.plugin.getConfigManager().getConfig().getInt("heartFragmentMobs." + e.getEntity().getType().getName().toLowerCase());
         if (percentage > 0) {
             int big = 100 / percentage;
-            int chance = (new Random()).nextInt(big - 1 + 1) + 1;
-            if (percentage == chance) {
+            int chance = (new Random()).nextInt(big);
+            if (0 == chance) {
                 ItemStack heart = new ItemStack(Material.FERMENTED_SPIDER_EYE);
                 ItemMeta meta = heart.getItemMeta();
                 meta.setDisplayName(Utils.chatRaw("&cHeart Fragment"));

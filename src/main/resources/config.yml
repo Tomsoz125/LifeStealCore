@@ -42,6 +42,9 @@ maxHealth: 40
 # 2 health = 1 heart
 minHealth: 2
 
+# The maximum amount of times one player can use the +5 Max Hearts item.
+plusMaxHeartLimit: 2
+
 # These are the only worlds that LifeSteal works in. Nothing in LifeSteal will work in worlds
 # that aren't on this list.
 # (Case Sensitive)
