@@ -19,8 +19,10 @@ public final class LifeStealCore extends JavaPlugin {
     ConfigManager config = new ConfigManager(this);
 
     CustomRecepies recepies = new CustomRecepies(this);
+    InteractEvent interactEvent;
 
     public void onEnable() {
+        this.interactEvent = new InteractEvent(this);
         this.config.initialize();
         Utils.sendConsole(Utils.chat(this, "&aConfiguration files have been initialised."));
         this.recepies.initialize();
@@ -44,17 +46,22 @@ public final class LifeStealCore extends JavaPlugin {
     public CustomRecepies getRecepies() {
         return this.recepies;
     }
+    public InteractEvent getInteractEvent() {
+        return interactEvent;
+    }
 
     public void registerEvents() {
         registerEvent(new DeathEvent(this));
         registerEvent(new WorldChangeEvent(this));
         registerEvent(new CraftEvent(this));
-        registerEvent(new InteractEvent(this));
+        registerEvent(interactEvent);
         registerEvent(new JoinEvent(this));
         registerEvent(new DamageEvent(this));
         registerEvent(new RespawnEvent(this));
         registerEvent(new MobDeathEvent(this));
         registerEvent(new CommandPreprocessEvent(this));
+        registerEvent(new InventoryOpen(this));
+        registerEvent(new BlockBreak(this));
     }
 
     public void registerCommands() {

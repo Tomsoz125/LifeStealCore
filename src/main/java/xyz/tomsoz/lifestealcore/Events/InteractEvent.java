@@ -4,8 +4,11 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,11 +18,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.loot.LootTable;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
 
+import java.util.HashMap;
+
 public class InteractEvent implements Listener {
     LifeStealCore plugin;
+
+    public HashMap<Location, LootTable> chests = new HashMap<>();
 
     public InteractEvent(LifeStealCore plugin) {
         this.plugin = plugin;
@@ -27,6 +35,10 @@ public class InteractEvent implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         FileConfiguration config = this.plugin.getConfigManager().getConfig();
+        if (e.getClickedBlock() != null && e.getClickedBlock().getType().equals(Material.CHEST) && (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))) {
+            LootTable table = ((Chest) e.getClickedBlock().getState()).getLootTable();
+            if (table != null) chests.put(e.getClickedBlock().getLocation(), table);
+        }
         if (e.getHand() != null && e.getHand().equals(EquipmentSlot.OFF_HAND))
             return;
         if (!Utils.isValidWorld(config, e.getPlayer().getWorld())) return;

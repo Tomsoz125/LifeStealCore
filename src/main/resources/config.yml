@@ -95,3 +95,20 @@ heartFragmentMobs:
   # The 1 means it is a 1% chance to drop one.
   villager: 1
   zombie: 1
+
+lootChances:
+  # Percentage chances of heart fragments.
+  abandoned_mineshaft: 5
+  ancient_city: 30
+  bastion: 15
+  buried_treasure: 10
+  desert_pyramid: 10
+  end_city: 50
+  igloo: 5
+  jungle_temple: 15
+  ruined_portal: 10
+  shipwreck_treasure: 12
+  simple_dungeon: 4
+  stronghold: 25
+  woodland_mansion: 15
+  village: 3
