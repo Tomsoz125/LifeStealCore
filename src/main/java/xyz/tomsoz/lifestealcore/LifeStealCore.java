@@ -14,6 +14,8 @@ import xyz.tomsoz.lifestealcore.Misc.ConfigManager;
 import xyz.tomsoz.lifestealcore.Misc.CustomRecepies;
 import xyz.tomsoz.lifestealcore.Misc.LogFilter;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
+import xyz.tomsoz.pluginbase.BaseSettings;
+import xyz.tomsoz.pluginbase.PluginManager;
 
 public final class LifeStealCore extends JavaPlugin {
     ConfigManager config = new ConfigManager(this);
@@ -22,6 +24,9 @@ public final class LifeStealCore extends JavaPlugin {
     InteractEvent interactEvent;
 
     public void onEnable() {
+        BaseSettings settings = new LifeStealCore.Settings();
+        PluginManager.setBaseSettings(settings);
+
         this.interactEvent = new InteractEvent(this);
         this.config.initialize();
         Utils.sendConsole(Utils.chat(this, "&aConfiguration files have been initialised."));
@@ -75,5 +80,13 @@ public final class LifeStealCore extends JavaPlugin {
 
     private void registerCommand(String command, CommandExecutor file) {
         getCommand(command).setExecutor(file);
+    }
+
+
+    private class Settings implements BaseSettings {
+        @Override
+        public String prefix() {
+            return getConfig().getString("prefix");
+        }
     }
 }

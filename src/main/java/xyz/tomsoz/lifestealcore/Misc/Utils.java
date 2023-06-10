@@ -5,16 +5,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
+import xyz.tomsoz.pluginbase.Text.Text;
 
 import java.util.List;
 
 public class Utils {
     public static String chat(LifeStealCore plugin, String textToTranslate) {
-        return ChatColor.translateAlternateColorCodes('&', plugin.getConfigManager().getMessages().getString("prefix") + " " + textToTranslate);
+        return Text.format(textToTranslate);
     }
 
     public static String chatRaw(String textToTranslate) {
-        return ChatColor.translateAlternateColorCodes('&', textToTranslate);
+        return Text.colourize(textToTranslate);
     }
 
     public static void sendConsole(String message) {
