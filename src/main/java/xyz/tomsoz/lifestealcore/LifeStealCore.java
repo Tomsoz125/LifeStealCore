@@ -15,15 +15,16 @@ import xyz.tomsoz.lifestealcore.Misc.CustomRecepies;
 import xyz.tomsoz.lifestealcore.Misc.LogFilter;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
 import xyz.tomsoz.pluginbase.BaseSettings;
+import xyz.tomsoz.pluginbase.PluginBase;
 import xyz.tomsoz.pluginbase.PluginManager;
 
-public final class LifeStealCore extends JavaPlugin {
+public final class LifeStealCore extends PluginBase {
     ConfigManager config = new ConfigManager(this);
 
     CustomRecepies recepies = new CustomRecepies(this);
     InteractEvent interactEvent;
 
-    public void onEnable() {
+    public void enable() {
         BaseSettings settings = new LifeStealCore.Settings();
         PluginManager.setBaseSettings(settings);
 
@@ -40,7 +41,7 @@ public final class LifeStealCore extends JavaPlugin {
         Utils.sendConsole(Utils.chat(this, "&a" + getDescription().getFullName() + " &7by&a " + String.join(", ", getDescription().getAuthors()) + " &7has successfully enabled."));
     }
 
-    public void onDisable() {
+    public void disable() {
         Utils.sendConsole(Utils.chat(this, "&c" + getDescription().getFullName() + " &7by&c " + String.join(", ", getDescription().getAuthors()) + " &7has successfully disabled."));
     }
 
@@ -86,7 +87,7 @@ public final class LifeStealCore extends JavaPlugin {
     private class Settings implements BaseSettings {
         @Override
         public String prefix() {
-            return getConfig().getString("prefix");
+            return getConfigManager().getMessages().getString("prefix");
         }
     }
 }
