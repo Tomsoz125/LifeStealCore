@@ -19,19 +19,19 @@ commands:
 permissions:
   lifesteal.*:
     description: Gives access to all LifeSteal commands.
-    default: false
     children:
       lifesteal.all: true
 
   lifesteal.all:
     description: Gives access to all LifeSteal commands.
-    default: false
     children:
       lifesteal.use: true
       lifesteal.withdraw: true
       lifesteal.reload: true
       lifesteal.get: true
       lifesteal.set: true
+      lifesteal.add: true
+      lifesteal.remove: true
 
   lifesteal.use:
     description: Player can use the lifesteal plugin.
@@ -45,12 +45,12 @@ permissions:
 
   lifesteal.reload:
     description: Player can reload the configuration.
-    default: false
 
   lifesteal.get:
     description: Player can check other player's heart count.
-    default: false
-
   lifesteal.set:
     description: Player can set other player's heart count.
-    default: false
+  lifesteal.add:
+    description: Player can add hearts to the player's count.
+  lifesteal.remove:
+    description: Player can remove hearts from the player's count.

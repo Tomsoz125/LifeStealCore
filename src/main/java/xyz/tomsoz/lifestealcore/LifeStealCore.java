@@ -1,10 +1,11 @@
 package xyz.tomsoz.lifestealcore;
 
+import jline.internal.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -74,16 +75,21 @@ public final class LifeStealCore extends PluginBase {
     }
 
     public void registerCommands() {
-        registerCommand("lifesteal", new LifeSteal(this));
-        registerCommand("withdraw", new Withdraw(this));
+        registerCommand("lifesteal", new LifeSteal(this), new LifeSteal(this));
+        registerCommand("withdraw", new Withdraw(this), null);
     }
 
     private void registerEvent(Listener event) {
         Bukkit.getPluginManager().registerEvents(event, this);
     }
 
-    private void registerCommand(String command, CommandExecutor file) {
-        getCommand(command).setExecutor(file);
+    private void registerCommand(String command, CommandExecutor file, @Nullable TabCompleter tabCompleter) {
+        if (tabCompleter == null) getCommand(command).setExecutor(file);
+        else {
+            PluginCommand cmd = getCommand(command);
+            cmd.setExecutor(file);
+            cmd.setTabCompleter(tabCompleter);
+        }
     }
 
 
