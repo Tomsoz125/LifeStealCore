@@ -20,9 +20,6 @@
 # https://tomsoz.xyz/discord
 # - - - - - - - - - - - - - - - - - -
 
-# This is the permission you need to use LifeSteal, without it you won't lose or gain hearts.
-heartChangePerm: "lifesteal.use"
-
 # This is the amount of health that is removed on each death.
 # 2 health = 1 heart
 removePerDeath: 2
@@ -38,7 +35,7 @@ addPerKill: 2
 maxHealth: 40
 
 # This is the minimum amount of health that a player can have. If they are at this point
-# then they won't give any health for being killed and won't lose any on death.
+# then they won't give any health for being killed and won't lose any on death unless banIfOutOfHearts is enabled.
 # 2 health = 1 heart
 minHealth: 2
 
@@ -53,14 +50,11 @@ onlyWorkIn: ["world", "world_nether", "world_the_end"]
 # If this is true then if a user reaches below the minHealth as defined above they will be banned from the server.
 banIfOutOfHearts: true
 
-# If a user has this permission they will not be banned when out of hearts and will instead be forced into spectator mode.
-banExemptPerm: "lifesteal.elim.exempt"
-
 # The command to ban people with. Only used if banIfOutOfHearts is enabled.
-banCommand: "ban %eliminated% -s Out of hearts!"
+banCommand: "ban %eliminated% Out of hearts!"
 
 # The command to unban a user if they are revived.
-unbanCommand: "unban %eliminated% -s Revived!"
+unbanCommand: "unban %eliminated% Revived!"
 
 # This allows players to craft the revive book and use it to bring back a player that has been eliminated.
 useReviveBook: true
@@ -73,7 +67,12 @@ revivedHealth: 10.0
 # To find out the actual crafting recipes check the plugin's spigot page.
 recipes:
   # +1 Heart
-  addHeart: true
+  addHeart:
+    enabled: true
+    recipe:
+      - ""
+      - ""
+      - ""
 
   # -1 Heart
   removeHeart: true

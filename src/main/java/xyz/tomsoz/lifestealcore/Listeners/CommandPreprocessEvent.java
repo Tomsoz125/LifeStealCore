@@ -1,4 +1,4 @@
-package xyz.tomsoz.lifestealcore.Events;
+package xyz.tomsoz.lifestealcore.Listeners;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;

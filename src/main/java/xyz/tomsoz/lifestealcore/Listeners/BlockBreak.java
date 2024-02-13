@@ -1,9 +1,8 @@
-package xyz.tomsoz.lifestealcore.Events;
+package xyz.tomsoz.lifestealcore.Listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

@@ -8,5 +8,49 @@ description: A light-weight plugin for a LifeSteal server with a lot of configur
 website: https://www.tomsoz.xyz/
 
 commands:
-  lsadmin:
-  transferheart:
+  lifesteal:
+    description: The main command for the LifeSteal plugin.
+    usage: /<command> <hello>
+    aliases: [ ls ]
+  withdraw:
+    description: Allows you to withdraw a heart into an item which you can share with other players.
+    usage: /withdraw
+
+permissions:
+  lifesteal.*:
+    description: Gives access to all LifeSteal commands.
+    default: false
+    children:
+      lifesteal.all: true
+
+  lifesteal.all:
+    description: Gives access to all LifeSteal commands.
+    default: false
+    children:
+      lifesteal.use: true
+      lifesteal.withdraw: true
+      lifesteal.reload: true
+      lifesteal.get: true
+      lifesteal.set: true
+
+  lifesteal.use:
+    description: Player can use the lifesteal plugin.
+    default: true
+    children:
+      lifesteal.withdraw: true
+
+  lifesteal.withdraw:
+    description: Player can withdraw hearts.
+    default: true
+
+  lifesteal.reload:
+    description: Player can reload the configuration.
+    default: false
+
+  lifesteal.get:
+    description: Player can check other player's heart count.
+    default: false
+
+  lifesteal.set:
+    description: Player can set other player's heart count.
+    default: false

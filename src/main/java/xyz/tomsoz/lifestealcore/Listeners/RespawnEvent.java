@@ -1,4 +1,4 @@
-package xyz.tomsoz.lifestealcore.Events;
+package xyz.tomsoz.lifestealcore.Listeners;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -8,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
-
-import java.util.List;
 
 public class RespawnEvent implements Listener {
     LifeStealCore plugin;

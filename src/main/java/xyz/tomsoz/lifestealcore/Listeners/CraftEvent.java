@@ -1,4 +1,4 @@
-package xyz.tomsoz.lifestealcore.Events;
+package xyz.tomsoz.lifestealcore.Listeners;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;

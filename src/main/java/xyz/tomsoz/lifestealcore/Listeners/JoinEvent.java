@@ -1,4 +1,4 @@
-package xyz.tomsoz.lifestealcore.Events;
+package xyz.tomsoz.lifestealcore.Listeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
@@ -9,8 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
 import xyz.tomsoz.lifestealcore.Misc.Utils;
-
-import java.util.List;
 
 public class JoinEvent implements Listener {
     LifeStealCore plugin;
