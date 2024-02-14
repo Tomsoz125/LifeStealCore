@@ -12,9 +12,11 @@ commands:
     description: The main command for the LifeSteal plugin.
     usage: /<command> <hello>
     aliases: [ ls ]
+    permission: "lifesteal.admin"
   withdraw:
     description: Allows you to withdraw a heart into an item which you can share with other players.
     usage: /withdraw
+    permission: "lifesteal.withdraw"
 
 permissions:
   lifesteal.*:
@@ -32,6 +34,9 @@ permissions:
       lifesteal.set: true
       lifesteal.add: true
       lifesteal.remove: true
+      lifesteal.admin: true
+      lifesteal.revive: true
+      lifesteal.give: true
 
   lifesteal.use:
     description: Player can use the lifesteal plugin.
@@ -62,3 +67,9 @@ permissions:
   lifesteal.spectator:
     description: Player won't be banned and will instead be placed into spectator mode.
     default: false
+  lifesteal.admin:
+    description: Player can use the /lifesteal commands.
+  lifesteal.revive:
+    description: Player can force revive eliminated players.
+  lifesteal.give:
+    description: Player can give themselves and others custom plugin items.

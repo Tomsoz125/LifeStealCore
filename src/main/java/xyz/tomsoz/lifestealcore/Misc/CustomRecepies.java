@@ -5,15 +5,20 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import xyz.tomsoz.lifestealcore.LifeStealCore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
 
 public class CustomRecepies {
+    char[] itemIds = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
     LifeStealCore plugin;
 
     ShapedRecipe addHeart;
@@ -59,27 +64,27 @@ public class CustomRecepies {
         this.maxHeart = maxHeartRecepie();
         this.heartFragments = heartFragmentsRecepie();
         this.reviveBook = reviveBookRecepie();
-        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.addHeart")) {
+        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.addHeart.enabled")) {
             if (Bukkit.getServer().getRecipe(this.addHeartKey) != null)
                 Bukkit.getServer().removeRecipe(this.addHeartKey);
             Bukkit.getServer().addRecipe((Recipe)getCreateHeart());
         }
-        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.add5MaxHearts")) {
+        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.add5MaxHearts.enabled")) {
             if (Bukkit.getServer().getRecipe(this.maxHeartKey) != null)
                 Bukkit.getServer().removeRecipe(this.maxHeartKey);
             Bukkit.getServer().addRecipe((Recipe)getMaxHeart());
         }
-        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.enchantedGoldenApple")) {
+        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.enchantedGoldenApple.enabled")) {
             if (Bukkit.getServer().getRecipe(this.enchantedGappKey) != null)
                 Bukkit.getServer().removeRecipe(this.enchantedGappKey);
             Bukkit.getServer().addRecipe((Recipe)getEnchantedGapp());
         }
-        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.heartFragments")) {
+        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.heartFragments.enabled")) {
             if (Bukkit.getServer().getRecipe(this.heartFragmentsKey) != null)
                 Bukkit.getServer().removeRecipe(this.heartFragmentsKey);
             Bukkit.getServer().addRecipe((Recipe)getHeartFragments());
         }
-        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.reviveBook")) {
+        if (this.plugin.getConfigManager().getConfig().getBoolean("recipes.reviveBook.enabled")) {
             if (Bukkit.getServer().getRecipe(this.reviveBookKey) != null)
                 Bukkit.getServer().removeRecipe(this.reviveBookKey);
             Bukkit.getServer().addRecipe((Recipe)getReviveBook());
@@ -122,8 +127,32 @@ public class CustomRecepies {
         heart.setItemMeta(meta);
         this.heartFragmentsKey = new NamespacedKey((Plugin)this.plugin, "fragmented_heart");
         ShapedRecipe recepie = new ShapedRecipe(this.heartFragmentsKey, heart);
-        recepie.shape(new String[] { "***", "***", "***" });
-        recepie.setIngredient('*', Material.FERMENTED_SPIDER_EYE);
+        HashMap<Character, RecipeChoice> mats = new HashMap<>();
+
+        List<String> rec = new ArrayList<>();
+        for (String s : plugin.getConfigManager().getConfig().getStringList("recipes.heartFragments.recipe")) {
+            StringBuilder line = new StringBuilder();
+            for (String s1 : s.split(";")) {
+                RecipeChoice mat = Utils.getMaterial(s1, plugin);
+                if (mats.containsValue(mat)) {
+                    for (char c : mats.keySet()) {
+                        if (mats.get(c).equals(mat)) {
+                            line.append(c);
+                        }
+                    }
+                    continue;
+                }
+                char id = itemIds[mats.size()];
+                mats.put(id, mat);
+                line.append(id);
+            }
+            rec.add(line.toString());
+        }
+
+        recepie.shape(rec.get(0), rec.get(1), rec.get(2));
+        for (char c : mats.keySet()) {
+            recepie.setIngredient(c, mats.get(c));
+        }
         return recepie;
     }
 
@@ -137,12 +166,38 @@ public class CustomRecepies {
         lore.add(Utils.chatRaw("&7maxed out."));
         meta.setLore(lore);
         heart.setItemMeta(meta);
-        this.addHeartKey = new NamespacedKey((Plugin)this.plugin, "extra_heart");
+        this.addHeartKey = new NamespacedKey(this.plugin, "extra_heart");
+
         ShapedRecipe recepie = new ShapedRecipe(this.addHeartKey, heart);
-        recepie.shape(new String[] { "*%*", "%#%", "*%*" });
-        recepie.setIngredient('*', Material.DIAMOND_BLOCK);
-        recepie.setIngredient('%', Material.EMERALD_BLOCK);
-        recepie.setIngredient('#', Material.TOTEM_OF_UNDYING);
+
+        HashMap<Character, RecipeChoice> mats = new HashMap<>();
+
+        List<String> rec = new ArrayList<>();
+        for (String s : plugin.getConfigManager().getConfig().getStringList("recipes.addHeart.recipe")) {
+            StringBuilder line = new StringBuilder();
+            for (String s1 : s.split(";")) {
+                RecipeChoice mat = Utils.getMaterial(s1, plugin);
+                if (mats.containsValue(mat)) {
+                    for (char c : mats.keySet()) {
+                        if (mats.get(c).equals(mat)) {
+                            line.append(c);
+                        }
+                    }
+                    continue;
+                }
+                char id = itemIds[mats.size()];
+                mats.put(id, mat);
+                line.append(id);
+            }
+            rec.add(line.toString());
+        }
+        Bukkit.getConsoleSender().sendMessage(rec.get(0));
+        Bukkit.getConsoleSender().sendMessage(rec.get(1));
+        Bukkit.getConsoleSender().sendMessage(rec.get(2));
+        recepie.shape(rec.get(0), rec.get(1), rec.get(2));
+        for (char c : mats.keySet()) {
+            recepie.setIngredient(c, mats.get(c));
+        }
         return recepie;
     }
 
@@ -150,9 +205,34 @@ public class CustomRecepies {
         ItemStack gapple = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
         this.enchantedGappKey = new NamespacedKey((Plugin)this.plugin, "enchanted_golden_apple");
         ShapedRecipe recepie = new ShapedRecipe(this.enchantedGappKey, gapple);
-        recepie.shape(new String[] { "***", "*#*", "***" });
-        recepie.setIngredient('*', Material.GOLD_BLOCK);
-        recepie.setIngredient('#', Material.GOLDEN_APPLE);
+
+        HashMap<Character, RecipeChoice> mats = new HashMap<>();
+
+        List<String> rec = new ArrayList<>();
+        for (String s : plugin.getConfigManager().getConfig().getStringList("recipes.enchantedGoldenApple.recipe")) {
+            StringBuilder line = new StringBuilder();
+            for (String s1 : s.split(";")) {
+                RecipeChoice mat = Utils.getMaterial(s1, plugin);
+                if (mats.containsValue(mat)) {
+                    for (char c : mats.keySet()) {
+                        if (mats.get(c).equals(mat)) {
+                            line.append(c);
+                        }
+                    }
+                    continue;
+                }
+                char id = itemIds[mats.size()];
+                mats.put(id, mat);
+                line.append(id);
+            }
+            rec.add(line.toString());
+        }
+
+        recepie.shape(rec.get(0), rec.get(1), rec.get(2));
+        for (char c : mats.keySet()) {
+            recepie.setIngredient(c, mats.get(c));
+        }
+
         return recepie;
     }
 
@@ -169,10 +249,32 @@ public class CustomRecepies {
         heart.setItemMeta(meta);
         this.maxHeartKey = new NamespacedKey((Plugin)this.plugin, "change_max_hearts");
         ShapedRecipe recepie = new ShapedRecipe(this.maxHeartKey, heart);
-        recepie.shape("<%<", "%<%", "<#<");
-        recepie.setIngredient('<', Material.RED_DYE);
-        recepie.setIngredient('%', Material.NETHERITE_BLOCK);
-        recepie.setIngredient('#', Material.NETHER_STAR);
+        HashMap<Character, RecipeChoice> mats = new HashMap<>();
+
+        List<String> rec = new ArrayList<>();
+        for (String s : plugin.getConfigManager().getConfig().getStringList("recipes.add5MaxHearts.recipe")) {
+            StringBuilder line = new StringBuilder();
+            for (String s1 : s.split(";")) {
+                RecipeChoice mat = Utils.getMaterial(s1, plugin);
+                if (mats.containsValue(mat)) {
+                    for (char c : mats.keySet()) {
+                        if (mats.get(c).equals(mat)) {
+                            line.append(c);
+                        }
+                    }
+                    continue;
+                }
+                char id = itemIds[mats.size()];
+                mats.put(id, mat);
+                line.append(id);
+            }
+            rec.add(line.toString());
+        }
+
+        recepie.shape(rec.get(0), rec.get(1), rec.get(2));
+        for (char c : mats.keySet()) {
+            recepie.setIngredient(c, mats.get(c));
+        }
         return recepie;
     }
 
@@ -188,10 +290,32 @@ public class CustomRecepies {
         book.setItemMeta(meta);
         this.reviveBookKey = new NamespacedKey(this.plugin, "revive_book");
         ShapedRecipe recepie = new ShapedRecipe(this.reviveBookKey, book);
-        recepie.shape("<<<", "%#%", "<<<");
-        recepie.setIngredient('<', Material.TOTEM_OF_UNDYING);
-        recepie.setIngredient('%', Material.DIAMOND_BLOCK);
-        recepie.setIngredient('#', Material.BOOK);
+
+        HashMap<Character, RecipeChoice> mats = new HashMap<>();
+        List<String> rec = new ArrayList<>();
+        for (String s : plugin.getConfigManager().getConfig().getStringList("recipes.reviveBook.recipe")) {
+            StringBuilder line = new StringBuilder();
+            for (String s1 : s.split(";")) {
+                RecipeChoice mat = Utils.getMaterial(s1, plugin);
+                if (mats.containsValue(mat)) {
+                    for (char c : mats.keySet()) {
+                        if (mats.get(c).equals(mat)) {
+                            line.append(c);
+                        }
+                    }
+                    continue;
+                }
+                char id = itemIds[mats.size()];
+                mats.put(id, mat);
+                line.append(id);
+            }
+            rec.add(line.toString());
+        }
+        recepie.shape(rec.get(0), rec.get(1), rec.get(2));
+        for (char c : mats.keySet()) {
+            recepie.setIngredient(c, mats.get(c));
+        }
+
         return recepie;
     }
 }

@@ -65,29 +65,46 @@ revivedHealth: 10.0
 
 # These are all recipes that are in the plugin and where you can toggle them.
 # To find out the actual crafting recipes check the plugin's spigot page.
-recipes:
+recipes: # CUSTOM ITEM IDS FOR RECIPES: HEART_FRAGMENT, ADD_HEART, PLUS_MAX_HEART, REVIVE_BOOK
   # +1 Heart
   addHeart:
     enabled: true
     recipe:
-      - ""
-      - ""
-      - ""
-
-  # -1 Heart
-  removeHeart: true
+      - "DIAMOND_BLOCK;EMERALD_BLOCK;DIAMOND_BLOCK"
+      - "EMERALD_BLOCK;TOTEM_OF_UNDYING;EMERALD_BLOCK"
+      - "DIAMOND_BLOCK;EMERALD_BLOCK;DIAMOND_BLOCK"
 
   # +5 Max Hearts
-  add5MaxHearts: true
+  add5MaxHearts:
+    enabled: true
+    recipe:
+      - "ADD_HEART;NETHERITE_BLOCK;ADD_HEART"
+      - "NETHERITE_BLOCK;ADD_HEART;NETHERITE_BLOCK"
+      - "ADD_HEART;NETHER_STAR;ADD_HEART"
 
   # Enchanted Golden Apple
-  enchantedGoldenApple: true
+  enchantedGoldenApple:
+    enabled: true
+    recipe:
+      - "GOLD_BLOCK;GOLD_BLOCK;GOLD_BLOCK"
+      - "GOLD_BLOCK;GOLDEN_APPLE;GOLD_BLOCK"
+      - "GOLD_BLOCK;GOLD_BLOCK;GOLD_BLOCK"
 
   # Using heart fragments
-  heartFragments: true
+  heartFragments:
+    enabled: true
+    recipe:
+      - "HEART_FRAGMENT;HEART_FRAGMENT;HEART_FRAGMENT"
+      - "HEART_FRAGMENT;HEART_FRAGMENT;HEART_FRAGMENT"
+      - "HEART_FRAGMENT;HEART_FRAGMENT;HEART_FRAGMENT"
 
   # Allows the crafting of revive books.
-  reviveBook: true
+  reviveBook:
+    enabled: true
+    recipe:
+      - "ADD_HEART;TOTEM_OF_UNDYING;ADD_HEART"
+      - "DIAMOND_BLOCK;ADD_HEART;DIAMOND_BLOCK"
+      - "ADD_HEART;BOOK;ADD_HEART"
 
 # These are the mobs that can drop heart fragments.
 heartFragmentMobs:

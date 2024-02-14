@@ -28,6 +28,7 @@ public class InventoryOpen implements Listener {
             Chest c = (Chest) e.getInventory().getHolder();
             LootTable loot = plugin.getInteractEvent().chests.get(((Chest) e.getInventory().getHolder()).getLocation());
             plugin.getInteractEvent().chests.remove(((Chest) e.getInventory().getHolder()).getLocation());
+            if (loot == null) return;
 
             if (loot.getKey().equals(LootTables.ABANDONED_MINESHAFT.getKey())) {
                 int percentage = this.plugin.getConfigManager().getConfig().getInt("lootChances.abandoned_mineshaft");

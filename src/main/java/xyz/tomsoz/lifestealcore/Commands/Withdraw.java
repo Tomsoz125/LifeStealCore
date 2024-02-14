@@ -39,7 +39,6 @@ public class Withdraw implements CommandExecutor {
         }
 
         if (p.getInventory().addItem(plugin.getHeartItem()).isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage(plugin.withdrawHealth(p, 2));
             p.sendMessage(Utils.chat(plugin, "&7Successfully withdrew a heart!"));
         } else {
             p.sendMessage(Utils.chat(plugin, "&cYou don't have space in your inventory!"));

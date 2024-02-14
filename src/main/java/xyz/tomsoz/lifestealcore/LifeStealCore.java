@@ -76,6 +76,7 @@ public final class LifeStealCore extends PluginBase {
         registerEvent(new CommandPreprocessEvent(this));
         registerEvent(new InventoryOpen(this));
         registerEvent(new BlockBreak(this));
+        registerEvent(new DropEvent(this));
     }
 
     public void registerCommands() {
@@ -163,5 +164,10 @@ public final class LifeStealCore extends PluginBase {
         heart.setItemMeta(meta);
 
         return heart;
+    }
+
+    public boolean hasPermission(CommandSender sender, String node) {
+        if ((sender instanceof Player) && ((Player) sender).hasPermission(node)) return true;
+        return !(sender instanceof Player);
     }
 }
