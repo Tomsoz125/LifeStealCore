@@ -1,5 +1,6 @@
 package xyz.tomsoz.lifestealcore.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -37,16 +38,13 @@ public class Withdraw implements CommandExecutor {
             return true;
         }
 
-        if (p.getInventory().containsAtLeast(plugin.getHeartItem(), 1) || p.getInventory().contains(Material.AIR)) {
+        if (p.getInventory().addItem(plugin.getHeartItem()).isEmpty()) {
+            Bukkit.getConsoleSender().sendMessage(plugin.withdrawHealth(p, 2));
+            p.sendMessage(Utils.chat(plugin, "&7Successfully withdrew a heart!"));
+        } else {
             p.sendMessage(Utils.chat(plugin, "&cYou don't have space in your inventory!"));
-            return true;
         }
 
-        plugin.withdrawHealth(p, 2);
-
-        p.getInventory().addItem(plugin.getHeartItem());
-
-        p.sendMessage(Utils.chat(plugin, "&7Successfully withdrew a heart!"));
         return true;
     }
 }

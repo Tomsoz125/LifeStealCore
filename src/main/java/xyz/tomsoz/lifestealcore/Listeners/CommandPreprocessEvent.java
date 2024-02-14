@@ -60,7 +60,7 @@ public class CommandPreprocessEvent implements Listener {
                 plugin.getConfigManager().getData().set("bannedPlayers", banned);
                 plugin.getConfigManager().saveOtherData();
                 if (plugin.getConfigManager().getConfig().getBoolean("banIfOutOfHearts")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), plugin.getConfigManager().getConfig().getString("unbanCommand"));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), plugin.getConfigManager().getConfig().getString("unbanCommand").replaceAll("%eliminated%", banned.getName()));
                 }
                 Bukkit.broadcastMessage(Utils.chatRaw(plugin.getConfigManager().getMessages().getString("unbannedUser").replaceAll("%nl%", "\n" + plugin.getConfigManager().getMessages().getString("prefix")).replaceAll("%eliminated%", banned.getName())));
                 ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();

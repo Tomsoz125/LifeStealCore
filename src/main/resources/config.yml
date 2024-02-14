@@ -97,6 +97,7 @@ heartFragmentMobs:
 
 lootChances:
   # Percentage chances of heart fragments.
+  # Set to 0 to disable
   abandoned_mineshaft: 5
   ancient_city: 30
   bastion: 15

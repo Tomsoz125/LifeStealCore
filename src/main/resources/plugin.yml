@@ -54,3 +54,11 @@ permissions:
     description: Player can add hearts to the player's count.
   lifesteal.remove:
     description: Player can remove hearts from the player's count.
+  lifesteal.exempt:
+    description: Player cannot be affected by lifesteal actions.
+    default: false
+    children:
+      lifesteal.spectator: true
+  lifesteal.spectator:
+    description: Player won't be banned and will instead be placed into spectator mode.
+    default: false

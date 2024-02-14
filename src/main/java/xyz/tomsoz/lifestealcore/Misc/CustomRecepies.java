@@ -169,7 +169,7 @@ public class CustomRecepies {
         heart.setItemMeta(meta);
         this.maxHeartKey = new NamespacedKey((Plugin)this.plugin, "change_max_hearts");
         ShapedRecipe recepie = new ShapedRecipe(this.maxHeartKey, heart);
-        recepie.shape(new String[] { "<%<", "%<%", "<#<" });
+        recepie.shape("<%<", "%<%", "<#<");
         recepie.setIngredient('<', Material.RED_DYE);
         recepie.setIngredient('%', Material.NETHERITE_BLOCK);
         recepie.setIngredient('#', Material.NETHER_STAR);
@@ -186,9 +186,9 @@ public class CustomRecepies {
         lore.add(Utils.chatRaw("&7dead."));
         meta.setLore(lore);
         book.setItemMeta(meta);
-        this.reviveBookKey = new NamespacedKey((Plugin)this.plugin, "revive_book");
+        this.reviveBookKey = new NamespacedKey(this.plugin, "revive_book");
         ShapedRecipe recepie = new ShapedRecipe(this.reviveBookKey, book);
-        recepie.shape(new String[] { "<<<", "%#%", "<<<" });
+        recepie.shape("<<<", "%#%", "<<<");
         recepie.setIngredient('<', Material.TOTEM_OF_UNDYING);
         recepie.setIngredient('%', Material.DIAMOND_BLOCK);
         recepie.setIngredient('#', Material.BOOK);

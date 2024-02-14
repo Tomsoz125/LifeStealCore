@@ -27,7 +27,7 @@ public class JoinEvent implements Listener {
         }
 
         if (plugin.getConfigManager().getData().getBoolean("toSurvival." + p.getUniqueId())) {
-            p.setGameMode(GameMode.SURVIVAL);
+            if (!p.hasPermission("lifesteal.exempt")) p.setGameMode(GameMode.SURVIVAL);
             p.sendMessage(Utils.chat(plugin, "&aYou have been revived!"));
             plugin.getConfigManager().getData().set("toSurvival." + p.getUniqueId(), null);
             plugin.getConfigManager().saveOtherData();

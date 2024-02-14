@@ -26,6 +26,7 @@ public class DeathEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent e) {
+
         FileConfiguration config = this.plugin.getConfigManager().getConfig();
         FileConfiguration msgs = this.plugin.getConfigManager().getMessages();
         FileConfiguration data = this.plugin.getConfigManager().getData();
@@ -43,7 +44,8 @@ public class DeathEvent implements Listener {
         meta.setLore(lore);
         heart.setItemMeta(meta);
         Player attacker = victim.getKiller();
-        if (attacker != null && attacker.hasPermission(config.getString("heartChangePerm"))) {
+        if (victim.hasPermission("lifesteal.exempt") || attacker.hasPermission("lifesteal.exempt")) return;
+        if (attacker != null && attacker.hasPermission("lifesteal.use")) {
             double current = attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             if (current < config.getDouble("maxHealth")) {
                 double newVal = current + config.getDouble("addPerKill");
@@ -54,7 +56,7 @@ public class DeathEvent implements Listener {
                 attacker.sendMessage(Utils.chat(this.plugin, msgs.getString("maxHealth").replaceAll("%max%", attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() + "").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
             }
         }
-        if (victim.hasPermission(config.getString("heartChangePerm"))) {
+        if (victim.hasPermission("lifesteal.use")) {
             double current = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             if (current > config.getDouble("minHealth")) {
                 if (attacker == null) {
@@ -73,11 +75,11 @@ public class DeathEvent implements Listener {
                 }
             } else {
                 if (config.getBoolean("banIfOutOfHearts")) {
-                    if (victim.hasPermission(config.getString("banExemptPerm"))) {
+                    if (victim.hasPermission("lifesteal.spectator")) {
                         victim.setGameMode(GameMode.SPECTATOR);
                         victim.sendMessage(Utils.chat(plugin, msgs.getString("userPutInSpec").replaceAll("%nl%", "\n" + msgs.getString("prefix"))));
                     } else {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString("banCommand"));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getString("banCommand").replaceAll("%eliminated%", victim.getName()));
                     }
                     List<String> banned = data.getStringList("bannedPlayers");
                     banned.add(victim.getUniqueId() + " : " + victim.getName());

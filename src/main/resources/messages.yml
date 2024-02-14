@@ -1,6 +1,7 @@
 prefix: "&7[&a&lLifeSteal&7]&7 "
 healthAdded: "&7You've stolen &a%stolen% &7health from &a%victim%&7!%nl%&7You now have &a%health% &7health."
 maxHealth: "&7You already have &c%max% &7health. A heart has been dropped on the floor."
+maxHealthItem: "&7You already have &c%max% &7health."
 healthRemoved: "&c%killer% &7has stolen &c%stolen% &7health from you&7!%nl%&7You now have &c%health% &7health."
 minHealth: "&7You can't lose any more health. :("
 healthRemovedNoKiller: "&7You've lost &c%lost% &7health.%nl%&7You now have &c%health% &7health. Your heart has dropped where you died. Try and get it back!"
