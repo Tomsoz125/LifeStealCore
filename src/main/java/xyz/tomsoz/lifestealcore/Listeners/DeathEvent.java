@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,6 +45,11 @@ public class DeathEvent implements Listener {
         meta.setLore(lore);
         heart.setItemMeta(meta);
         Player attacker = victim.getKiller();
+        if (plugin.CLXManager != null && plugin.CLXManager.getDeathManager().wasPunishKilled(victim)) {
+            Entity a = plugin.CLXManager.getCombatManager().getTagInformation(victim).getCurrentEnemy();
+            if (!(a instanceof Player)) return;
+            attacker = (Player) a;
+        }
         if (victim.hasPermission("lifesteal.exempt") || attacker.hasPermission("lifesteal.exempt")) return;
         if (attacker != null && attacker.hasPermission("lifesteal.use")) {
             double current = attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();

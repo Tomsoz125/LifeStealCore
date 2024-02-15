@@ -1,5 +1,6 @@
 package xyz.tomsoz.lifestealcore;
 
+import com.github.sirblobman.combatlogx.api.ICombatLogX;
 import jline.internal.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -15,10 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.tomsoz.lifestealcore.Commands.LifeSteal;
 import xyz.tomsoz.lifestealcore.Commands.Withdraw;
 import xyz.tomsoz.lifestealcore.Listeners.*;
-import xyz.tomsoz.lifestealcore.Misc.ConfigManager;
-import xyz.tomsoz.lifestealcore.Misc.CustomRecepies;
-import xyz.tomsoz.lifestealcore.Misc.LogFilter;
-import xyz.tomsoz.lifestealcore.Misc.Utils;
+import xyz.tomsoz.lifestealcore.Misc.*;
 import xyz.tomsoz.pluginbase.BaseSettings;
 import xyz.tomsoz.pluginbase.PluginBase;
 import xyz.tomsoz.pluginbase.PluginManager;
@@ -31,6 +29,7 @@ public final class LifeStealCore extends PluginBase {
 
     CustomRecepies recepies = new CustomRecepies(this);
     InteractEvent interactEvent;
+    public ICombatLogX CLXManager;
 
     public void enable() {
         BaseSettings settings = new LifeStealCore.Settings();
@@ -38,6 +37,10 @@ public final class LifeStealCore extends PluginBase {
 
         this.interactEvent = new InteractEvent(this);
         this.config.initialize();
+        if (Bukkit.getPluginManager().isPluginEnabled("CombatLogX")) {
+            Utils.sendConsole(Utils.chat(this, "&aCombatLogX detected, enabling CLX API."));
+            this.CLXManager = (ICombatLogX) Bukkit.getPluginManager().getPlugin("CombatLogX");
+        }
         Utils.sendConsole(Utils.chat(this, "&aConfiguration files have been initialised."));
         this.recepies.initialize();
         Utils.sendConsole(Utils.chat(this, "&aCrafting recepies have been initialised."));
@@ -47,6 +50,14 @@ public final class LifeStealCore extends PluginBase {
         Utils.sendConsole(Utils.chat(this, "&aCommands have been initialised."));
         ((Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
         Utils.sendConsole(Utils.chat(this, "&a" + getDescription().getFullName() + " &7by&a " + String.join(", ", getDescription().getAuthors()) + " &7has successfully enabled."));
+        new UpdateChecker(this, 53460).getLatestVersion(version -> {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                Utils.sendConsole(Utils.chat(this, "&aPlugin is up to date!"));
+            } else {
+                Utils.sendConsole(Utils.chat(this, "&c" + getDescription().getFullName() + " v" + getDescription().getVersion() + " needs an update! Download it at https://www.spigotmc.org/resources/lifesteal.103378/!"));
+            }
+
+        });
     }
 
     public void disable() {

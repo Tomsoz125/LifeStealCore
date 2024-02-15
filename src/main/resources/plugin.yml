@@ -1,7 +1,6 @@
 name: LifeStealCore
 version: '${project.version}'
 main: xyz.tomsoz.lifestealcore.LifeStealCore
-api-version: 1.19
 prefix: LifeSteal
 authors: [ Tomsoz ]
 description: A light-weight plugin for a LifeSteal server with a lot of configurable features and an optional resource pack.
