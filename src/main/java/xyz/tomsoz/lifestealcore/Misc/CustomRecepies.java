@@ -191,9 +191,6 @@ public class CustomRecepies {
             }
             rec.add(line.toString());
         }
-        Bukkit.getConsoleSender().sendMessage(rec.get(0));
-        Bukkit.getConsoleSender().sendMessage(rec.get(1));
-        Bukkit.getConsoleSender().sendMessage(rec.get(2));
         recepie.shape(rec.get(0), rec.get(1), rec.get(2));
         for (char c : mats.keySet()) {
             recepie.setIngredient(c, mats.get(c));

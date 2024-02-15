@@ -17,7 +17,7 @@
 #
 # If you're confused, then please
 # join our discord
-# https://tomsoz.xyz/discord
+# https://dsc.gg/tomsoz
 # - - - - - - - - - - - - - - - - - -
 
 # This is the amount of health that is removed on each death.
@@ -54,7 +54,7 @@ banIfOutOfHearts: true
 banCommand: "ban %eliminated% Out of hearts!"
 
 # The command to unban a user if they are revived.
-unbanCommand: "unban %eliminated% Revived!"
+unbanCommand: "pardon %eliminated% Revived!"
 
 # This allows players to craft the revive book and use it to bring back a player that has been eliminated.
 useReviveBook: true
@@ -66,9 +66,15 @@ revivedHealth: 10.0
 # These are all recipes that are in the plugin and where you can toggle them.
 # To find out the actual crafting recipes check the plugin's spigot page.
 recipes: # CUSTOM ITEM IDS FOR RECIPES: HEART_FRAGMENT, ADD_HEART, PLUS_MAX_HEART, REVIVE_BOOK
-  # +1 Heart
+  # This is the recipe for the +1 heart.
   addHeart:
+    # Set this to false to prevent it from being registered.
     enabled: true
+    # This represents each row in the crafting table. The item ids must be seperated with a semicolon (;).
+    # To leave a gap in the recipe use the item id "AIR" and don't leave a blank space; There must be
+    # three items in a row.
+    # These same rules apply to all of the recipes in this file.
+    # The item ids are here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
     recipe:
       - "DIAMOND_BLOCK;EMERALD_BLOCK;DIAMOND_BLOCK"
       - "EMERALD_BLOCK;TOTEM_OF_UNDYING;EMERALD_BLOCK"
@@ -99,6 +105,8 @@ recipes: # CUSTOM ITEM IDS FOR RECIPES: HEART_FRAGMENT, ADD_HEART, PLUS_MAX_HEAR
       - "HEART_FRAGMENT;HEART_FRAGMENT;HEART_FRAGMENT"
 
   # Allows the crafting of revive books.
+  # It's recommended that the amount of hearts in the revive book recipe is the same
+  # number of hearts that you spawn with after being revived to prevent heart duping.
   reviveBook:
     enabled: true
     recipe:
@@ -109,6 +117,7 @@ recipes: # CUSTOM ITEM IDS FOR RECIPES: HEART_FRAGMENT, ADD_HEART, PLUS_MAX_HEAR
 # These are the mobs that can drop heart fragments.
 heartFragmentMobs:
   # The 1 means it is a 1% chance to drop one.
+  # You can use any mob name here
   villager: 1
   zombie: 1
 

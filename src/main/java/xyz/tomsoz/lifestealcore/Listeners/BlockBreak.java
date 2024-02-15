@@ -141,12 +141,10 @@ public class BlockBreak implements Listener {
 
                 if (loot.getKey().equals(LootTables.END_CITY_TREASURE.getKey())) {
                     int percentage = this.plugin.getConfigManager().getConfig().getInt("lootChances.end_city");
-                    Bukkit.broadcastMessage(percentage+"");
                     if (percentage > 0) {
                         int big = 100 / percentage;
                         int chance = (new Random()).nextInt(big);
                         if (0 == chance) {
-                            Bukkit.broadcastMessage("1");
                             ItemStack heart = new ItemStack(Material.FERMENTED_SPIDER_EYE);
                             ItemMeta meta = heart.getItemMeta();
                             meta.setDisplayName(Utils.chatRaw("&cHeart Fragment"));
