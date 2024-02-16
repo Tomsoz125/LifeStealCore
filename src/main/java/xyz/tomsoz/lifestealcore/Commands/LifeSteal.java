@@ -278,7 +278,7 @@ public class LifeSteal implements CommandExecutor, TabCompleter {
                 }
                 int amount = 1;
                 try {
-                    amount = Integer.parseInt(args[3]);
+                    amount = Integer.parseInt(args.length < 4 ? "1" : args[3]);
                 } catch (NumberFormatException e) {
                 }
 

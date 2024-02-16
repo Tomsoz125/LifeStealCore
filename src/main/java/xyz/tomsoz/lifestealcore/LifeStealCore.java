@@ -4,6 +4,7 @@ import com.github.sirblobman.combatlogx.api.ICombatLogX;
 import jline.internal.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -50,7 +51,7 @@ public final class LifeStealCore extends PluginBase {
         Utils.sendConsole(Utils.chat(this, "&aCommands have been initialised."));
         ((Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
         Utils.sendConsole(Utils.chat(this, "&a" + getDescription().getFullName() + " &7by&a " + String.join(", ", getDescription().getAuthors()) + " &7has successfully enabled."));
-        new UpdateChecker(this, 53460).getLatestVersion(version -> {
+        new UpdateChecker(this, 103378).getLatestVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 Utils.sendConsole(Utils.chat(this, "&aPlugin is up to date!"));
             } else {
@@ -58,6 +59,7 @@ public final class LifeStealCore extends PluginBase {
             }
 
         });
+        Metrics metrics = new Metrics(this, 21003);
     }
 
     public void disable() {
