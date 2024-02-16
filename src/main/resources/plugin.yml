@@ -7,6 +7,9 @@ authors: [ Tomsoz ]
 description: A light-weight plugin for a LifeSteal server with a lot of configurable features and an optional resource pack.
 website: https://www.tomsoz.xyz/
 
+softdepend:
+  - CombatLogX
+
 commands:
   lifesteal:
     description: The main command for the LifeSteal plugin.

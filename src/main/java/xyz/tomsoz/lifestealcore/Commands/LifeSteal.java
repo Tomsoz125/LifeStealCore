@@ -99,18 +99,19 @@ public class LifeSteal implements CommandExecutor, TabCompleter {
                             return true;
                         }
                         bannedList.remove((banned.getUniqueId() + " : " + banned.getName()));
-                        plugin.getConfigManager().getData().set("bannedPlayers", banned);
+                        plugin.getConfigManager().getData().set("bannedPlayers", bannedList);
                         plugin.getConfigManager().saveOtherData();
                         if (plugin.getConfigManager().getConfig().getBoolean("banIfOutOfHearts")) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), plugin.getConfigManager().getConfig().getString("unbanCommand").replaceAll("%eliminated%", banned.getName()));
                         }
                         Bukkit.broadcastMessage(Utils.chatRaw(plugin.getConfigManager().getMessages().getString("unbannedUser").replaceAll("%nl%", "\n" + plugin.getConfigManager().getMessages().getString("prefix")).replaceAll("%eliminated%", banned.getName())));
+                        plugin.getConfigManager().getData().set("health." + ((Player) banned).getUniqueId(), Double.valueOf(plugin.getConfigManager().getConfig().getDouble("revivedHealth")));
+                        this.plugin.getConfigManager().saveOtherData();
                         if (banned.isOnline()) {
                             ((Player) banned).setGameMode(GameMode.SURVIVAL);
                             ((Player) banned).teleport(((Player) banned).getBedSpawnLocation() == null ? ((Player) banned).getWorld().getSpawnLocation() : ((Player) banned).getBedSpawnLocation());
                             ((Player) banned).getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(plugin.getConfigManager().getConfig().getDouble("revivedHealth"));
-                            plugin.getConfigManager().getData().set("health." + ((Player) banned).getUniqueId(), Double.valueOf(plugin.getConfigManager().getConfig().getDouble("revivedHealth")));
-                            this.plugin.getConfigManager().saveOtherData();
+
                         } else {
                             plugin.getConfigManager().getData().set("toSurvival." + banned.getUniqueId(), true);
                             plugin.getConfigManager().saveOtherData();

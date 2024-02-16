@@ -1,5 +1,6 @@
 package xyz.tomsoz.lifestealcore.Listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -23,6 +24,13 @@ public class WorldChangeEvent implements Listener {
         FileConfiguration data = this.plugin.getConfigManager().getData();
 
         Player p = e.getPlayer();
+        if (plugin.getConfigManager().getData().getBoolean("toSurvival." + p.getUniqueId()) && Utils.isValidWorld(config, p.getWorld())) {
+            if (!p.hasPermission("lifesteal.exempt")) p.setGameMode(GameMode.SURVIVAL);
+            p.sendMessage(Utils.chat(plugin, "&aYou have been revived!"));
+            plugin.getConfigManager().getData().set("toSurvival." + p.getUniqueId(), null);
+            plugin.getConfigManager().saveOtherData();
+        }
+
         if (!Utils.isValidWorld(config, e.getPlayer().getWorld())) {
             if (Utils.isValidWorld(config, e.getFrom())) {
                 data.set("health." + p.getUniqueId(), Double.valueOf(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));

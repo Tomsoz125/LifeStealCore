@@ -23,14 +23,17 @@ import xyz.tomsoz.pluginbase.PluginBase;
 import xyz.tomsoz.pluginbase.PluginManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public final class LifeStealCore extends PluginBase {
     ConfigManager config = new ConfigManager(this);
 
-    CustomRecepies recepies = new CustomRecepies(this);
+    public HashMap<UUID, Player> lastDamager = new HashMap<>();
     InteractEvent interactEvent;
     public ICombatLogX CLXManager;
+    CustomRecepies recipes = new CustomRecepies(this);
 
     public void enable() {
         BaseSettings settings = new LifeStealCore.Settings();
@@ -43,8 +46,8 @@ public final class LifeStealCore extends PluginBase {
             this.CLXManager = (ICombatLogX) Bukkit.getPluginManager().getPlugin("CombatLogX");
         }
         Utils.sendConsole(Utils.chat(this, "&aConfiguration files have been initialised."));
-        this.recepies.initialize();
-        Utils.sendConsole(Utils.chat(this, "&aCrafting recepies have been initialised."));
+        this.recipes.initialize();
+        Utils.sendConsole(Utils.chat(this, "&aCrafting recipes have been initialised."));
         registerEvents();
         Utils.sendConsole(Utils.chat(this, "&aEvents have been initialised."));
         registerCommands();
@@ -70,8 +73,8 @@ public final class LifeStealCore extends PluginBase {
         return this.config;
     }
 
-    public CustomRecepies getRecepies() {
-        return this.recepies;
+    public CustomRecepies getRecipes() {
+        return this.recipes;
     }
     public InteractEvent getInteractEvent() {
         return interactEvent;
@@ -135,7 +138,7 @@ public final class LifeStealCore extends PluginBase {
             return "&cYou're over the maximum number of hearts.";
         }
         if (newHealth < getConfigManager().getConfig().getDouble("minHealth")) {
-            return "&cYou're under the minumum number of hearts.";
+            return "&cYou're under the minimum number of hearts.";
         }
         setHealth(p, newHealth);
         return "&7Successfully added &a" + hearts + " &7heart(s) to your total.";
@@ -147,7 +150,7 @@ public final class LifeStealCore extends PluginBase {
             return "&cYou're over the maximum number of hearts.";
         }
         if (newHealth < getConfigManager().getConfig().getDouble("minHealth")) {
-            return "&cYou're under the minumum number of hearts.";
+            return "&cYou're under the minimum number of hearts.";
         }
         setHealth(p, newHealth);
         return "&7Successfully removed &a" + hearts + " &7heart(s) from your total.";

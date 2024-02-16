@@ -20,17 +20,18 @@ public class JoinEvent implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         FileConfiguration config = this.plugin.getConfigManager().getConfig();
         Player p = e.getPlayer();
-        if (Utils.isValidWorld(config, p.getWorld())) {
-            double getMaxHealth = this.plugin.getConfigManager().getData().getDouble("health." + p.getUniqueId());
-            if (getMaxHealth != 0.0D)
-                p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth);
-        }
 
-        if (plugin.getConfigManager().getData().getBoolean("toSurvival." + p.getUniqueId())) {
+        if (plugin.getConfigManager().getData().getBoolean("toSurvival." + p.getUniqueId()) && Utils.isValidWorld(config, p.getWorld())) {
             if (!p.hasPermission("lifesteal.exempt")) p.setGameMode(GameMode.SURVIVAL);
             p.sendMessage(Utils.chat(plugin, "&aYou have been revived!"));
             plugin.getConfigManager().getData().set("toSurvival." + p.getUniqueId(), null);
             plugin.getConfigManager().saveOtherData();
+        }
+
+        if (Utils.isValidWorld(config, p.getWorld())) {
+            double getMaxHealth = this.plugin.getConfigManager().getData().getDouble("health." + p.getUniqueId());
+            if (getMaxHealth != 0.0D)
+                p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth);
         }
     }
 }

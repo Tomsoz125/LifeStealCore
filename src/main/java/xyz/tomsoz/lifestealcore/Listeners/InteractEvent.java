@@ -44,7 +44,7 @@ public class InteractEvent implements Listener {
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e
                 .getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Player p = e.getPlayer();
-            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getCreateHeart().getResult().getItemMeta().getDisplayName())) {
+            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecipes().getCreateHeart().getResult().getItemMeta().getDisplayName())) {
                 e.setCancelled(true);
                 int extraHealth = this.plugin.getConfigManager().getData().getInt("maxHealth." + p.getUniqueId());
                 int totalHealth = this.plugin.getConfigManager().getConfig().getInt("maxHealth") + extraHealth;
@@ -60,7 +60,7 @@ public class InteractEvent implements Listener {
                 this.plugin.getConfigManager().saveOtherData();
                 p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("healthCrafted")));
             }
-            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getMaxHeart().getResult().getItemMeta().getDisplayName())) {
+            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecipes().getMaxHeart().getResult().getItemMeta().getDisplayName())) {
                 e.setCancelled(true);
                 int extraHealth = this.plugin.getConfigManager().getData().getInt("maxHealth." + p.getUniqueId());
                 if (extraHealth >= (10 * plugin.getConfigManager().getConfig().getInt("plusMaxHeartLimit"))) {
@@ -74,7 +74,7 @@ public class InteractEvent implements Listener {
                 this.plugin.getConfigManager().saveOtherData();
                 p.sendMessage(Utils.chat(this.plugin, this.plugin.getConfigManager().getMessages().getString("addedMaxHealth").replaceAll("%max%", extraHealth + 10.0D + "")));
             }
-            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecepies().getReviveBook().getResult().getItemMeta().getDisplayName())) {
+            if (p.getInventory().getItemInMainHand().getItemMeta() != null && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.plugin.getRecipes().getReviveBook().getResult().getItemMeta().getDisplayName())) {
                 e.setCancelled(true);
                 ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
                 BookMeta meta = (BookMeta) book.getItemMeta();

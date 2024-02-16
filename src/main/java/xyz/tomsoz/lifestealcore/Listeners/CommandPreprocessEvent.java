@@ -54,24 +54,25 @@ public class CommandPreprocessEvent implements Listener {
             e.setCancelled(true);
             e.getPlayer().sendMessage(Utils.chat(plugin,"Reviving..."));
             OfflinePlayer banned = Bukkit.getOfflinePlayer(UUID.fromString(e.getMessage().replaceFirst("/75392749c-d659-41ac-aabc-d72299ef9a105392749c-d659-41ac-aabc-d72299ef9a10 ", "").split(" : ")[0]));
+            String name = e.getMessage().replaceFirst("/75392749c-d659-41ac-aabc-d72299ef9a105392749c-d659-41ac-aabc-d72299ef9a10 ", "").split(" : ")[1];
             if (banned != null) {
                 List<String> bannedList = plugin.getConfigManager().getData().getStringList("bannedPlayers");
                 bannedList.remove((banned.getUniqueId() + " : " + banned.getName()));
-                plugin.getConfigManager().getData().set("bannedPlayers", banned);
+                plugin.getConfigManager().getData().set("bannedPlayers", bannedList);
                 plugin.getConfigManager().saveOtherData();
                 if (plugin.getConfigManager().getConfig().getBoolean("banIfOutOfHearts")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), plugin.getConfigManager().getConfig().getString("unbanCommand").replaceAll("%eliminated%", banned.getName()));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), plugin.getConfigManager().getConfig().getString("unbanCommand").replaceAll("%eliminated%", name));
                 }
-                Bukkit.broadcastMessage(Utils.chatRaw(plugin.getConfigManager().getMessages().getString("unbannedUser").replaceAll("%nl%", "\n" + plugin.getConfigManager().getMessages().getString("prefix")).replaceAll("%eliminated%", banned.getName())));
+                Bukkit.broadcastMessage(Utils.chatRaw(plugin.getConfigManager().getMessages().getString("unbannedUser").replaceAll("%nl%", "\n" + plugin.getConfigManager().getMessages().getString("prefix")).replaceAll("%eliminated%", name)));
                 ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
                 hand.setAmount(hand.getAmount() - 1);
                 e.getPlayer().getInventory().setItemInMainHand(hand);
-                if (banned.isOnline()) {
+                plugin.getConfigManager().getData().set("health." + banned.getUniqueId(), Double.valueOf(plugin.getConfigManager().getConfig().getDouble("revivedHealth")));
+                plugin.getConfigManager().saveOtherData();
+                if (banned.isOnline() && Utils.isValidWorld(plugin.getConfigManager().getConfig(), banned.getPlayer().getWorld())) {
                     ((Player) banned).setGameMode(GameMode.SURVIVAL);
                     ((Player) banned).teleport(((Player) banned).getBedSpawnLocation() == null ?  e.getPlayer().getWorld().getSpawnLocation() : ((Player) banned).getBedSpawnLocation());
                     ((Player) banned).getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(plugin.getConfigManager().getConfig().getDouble("revivedHealth"));
-                    plugin.getConfigManager().getData().set("health." + ((Player) banned).getUniqueId(), Double.valueOf(plugin.getConfigManager().getConfig().getDouble("revivedHealth")));
-                    this.plugin.getConfigManager().saveOtherData();
                 } else {
                     plugin.getConfigManager().getData().set("toSurvival." + banned.getUniqueId(), true);
                     plugin.getConfigManager().saveOtherData();

@@ -54,7 +54,7 @@ banIfOutOfHearts: true
 banCommand: "ban %eliminated% Out of hearts!"
 
 # The command to unban a user if they are revived.
-unbanCommand: "pardon %eliminated% Revived!"
+unbanCommand: "pardon %eliminated%"
 
 # This allows players to craft the revive book and use it to bring back a player that has been eliminated.
 useReviveBook: true

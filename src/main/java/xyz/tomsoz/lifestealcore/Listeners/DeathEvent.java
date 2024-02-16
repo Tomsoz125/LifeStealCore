@@ -45,10 +45,9 @@ public class DeathEvent implements Listener {
         meta.setLore(lore);
         heart.setItemMeta(meta);
         Player attacker = victim.getKiller();
+        Bukkit.broadcastMessage(String.valueOf(plugin.CLXManager.getDeathManager().wasPunishKilled(victim)));
         if (plugin.CLXManager != null && plugin.CLXManager.getDeathManager().wasPunishKilled(victim)) {
-            Entity a = plugin.CLXManager.getCombatManager().getTagInformation(victim).getCurrentEnemy();
-            if (!(a instanceof Player)) return;
-            attacker = (Player) a;
+            attacker = plugin.lastDamager.get(victim.getUniqueId());
         }
         if (victim.hasPermission("lifesteal.exempt") || attacker.hasPermission("lifesteal.exempt")) return;
         if (attacker != null && attacker.hasPermission("lifesteal.use")) {
