@@ -58,7 +58,7 @@ public final class LifeStealCore extends PluginBase {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 Utils.sendConsole(Utils.chat(this, "&aPlugin is up to date!"));
             } else {
-                Utils.sendConsole(Utils.chat(this, "&c" + getDescription().getFullName() + " v" + getDescription().getVersion() + " needs an update! Download it at https://www.spigotmc.org/resources/lifesteal.103378/!"));
+                Utils.sendConsole(Utils.chat(this, "&c" + getDescription().getFullName() + " needs an update! Download it at https://www.spigotmc.org/resources/lifesteal.103378/!"));
             }
 
         });
