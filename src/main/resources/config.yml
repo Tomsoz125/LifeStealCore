@@ -28,6 +28,9 @@ removePerDeath: 2
 # 2 health = 1 heart
 addPerKill: 2
 
+# If players can lose hearts to mobs or not.
+mobsAllowed: false
+
 # This is the maximum amount of health that a player can have. This does not include +5 max
 # hearts.
 # If that recipe is enabled please take this into consideration.

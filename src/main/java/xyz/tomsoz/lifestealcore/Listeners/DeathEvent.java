@@ -32,8 +32,12 @@ public class DeathEvent implements Listener {
         FileConfiguration msgs = this.plugin.getConfigManager().getMessages();
         FileConfiguration data = this.plugin.getConfigManager().getData();
         Player victim = e.getEntity();
+        Player attacker = victim.getKiller();
 
         if (!Utils.isValidWorld(config, victim.getWorld())) return;
+        if (!config.getBoolean("mobsAllowed") && attacker == null) {
+            return;
+        }
 
         ItemStack heart = new ItemStack(Material.RED_DYE);
         ItemMeta meta = heart.getItemMeta();
@@ -44,7 +48,7 @@ public class DeathEvent implements Listener {
         lore.add(Utils.chatRaw("&7maxed out."));
         meta.setLore(lore);
         heart.setItemMeta(meta);
-        Player attacker = victim.getKiller();
+
         if (plugin.CLXManager != null && plugin.CLXManager.getDeathManager().wasPunishKilled(victim)) {
             attacker = plugin.lastDamager.get(victim.getUniqueId());
         }
